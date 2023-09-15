@@ -11,11 +11,10 @@ terraform {
 
 provider "aws" {}
 
-resource "aws_instance" "app_server" {
+module "web" {
+  source = "./modules/web"
+
   ami           = var.ami
   instance_type = var.instance_type
-
-  tags = {
-    Name = var.instance_tag
-  }
+  instance_tag  = var.instance_tag
 }
