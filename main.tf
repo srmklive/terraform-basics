@@ -11,6 +11,12 @@ terraform {
 
 provider "aws" {}
 
+resource "random_password" "mysql" {
+  length = 16
+  special = true
+  override_special = "_%@"
+}
+
 module "web" {
   source = "./modules/web"
 
@@ -24,7 +30,7 @@ module "web" {
 
 module "db" {
   source = "./modules/mysql"
-  depends_on = [module.web]
+  depends_on = [module.web, random_password.mysql]
 
   ami           = var.ami
   instance_type = var.instance_type
@@ -33,4 +39,5 @@ module "db" {
   subnet_id     = aws_subnet.tf-web.id
   vpc_id        = aws_vpc.tf-vpc.id
   sg_tf_web     = module.web.sg_tf_web
+  mysql_root_password = random_password.mysql.result
 }

@@ -65,7 +65,8 @@ resource "aws_instance" "web_server" {
       "sudo cp /home/ubuntu/default-host.conf /etc/nginx/conf.d/default.conf",
       "sudo cp /home/ubuntu/www.conf /etc/php/8.2/fpm/pool.d/www.conf",
       "sudo service php8.2-fpm restart",
-      "sudo service nginx restart"
+      "sudo service nginx restart",
+      "sudo reboot"
     ]
   }
 
@@ -78,6 +79,6 @@ resource "aws_instance" "web_server" {
     user     = "ubuntu"
     password = ""
     host     = self.public_ip
-    private_key = file("${path.module}/../../TF-TEST.pem")
+    private_key = file("${path.module}/../../${var.key_name}.pem")
   }
 }

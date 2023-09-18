@@ -26,3 +26,12 @@ variable "vpc_id" {
 variable "sg_tf_web" {
   description = "Web Server Security group ID"
 }
+
+variable "mysql_root_password" {
+  description = "MySQL Root User Password"
+}
+
+variable "mysql_password_file" {
+  description = "File containing password for MySQL Root User."
+  default = "mysql_root_password.txt"
+}

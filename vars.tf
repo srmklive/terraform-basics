@@ -17,3 +17,8 @@ variable "key_name" {
 variable "availability_zone" {
   default = "us-east-1"
 }
+
+variable "mysql_root_password" {
+  description = "MySQL Root User Password"
+  default = "root"
+}

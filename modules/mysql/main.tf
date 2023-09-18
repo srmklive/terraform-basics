@@ -30,6 +30,11 @@ resource "aws_security_group" "test-db" {
   }
 }
 
+resource "local_file" "password_file" {
+  filename = "${path.module}/${var.mysql_password_file}"
+  content  = var.mysql_root_password
+}
+
 # Create an EC2 instance
 resource "aws_instance" "db" {
   ami           = var.ami
@@ -44,5 +49,31 @@ resource "aws_instance" "db" {
 
   root_block_device {
     delete_on_termination = "true"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/install_mysql_ubuntu.sh"
+    destination = "/home/ubuntu/install_mysql_ubuntu.sh"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/${var.mysql_password_file}"
+    destination = "/home/ubuntu/mysql_root_password"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /home/ubuntu/install_mysql_ubuntu.sh",
+      "cd /home/ubuntu && sudo ./install_mysql_ubuntu.sh",
+      "sudo reboot"
+    ]
+  }
+
+  connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    password = ""
+    host     = self.public_ip
+    private_key = file("${path.module}/../../${var.key_name}.pem")
   }
 }
