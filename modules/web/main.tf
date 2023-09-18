@@ -1,7 +1,7 @@
 resource "aws_security_group" "sg-test-web" {
   name = "sg_test_web"
   description = "Security Group for Web Server"
-  vpc_id = "vpc-9bfd31fe"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port = "80"
@@ -26,10 +26,11 @@ resource "aws_security_group" "sg-test-web" {
 }
 
 resource "aws_instance" "web_server" {
-  ami           = var.ami
-  instance_type = var.instance_type
-  key_name = "TF-TEST"
-  vpc_security_group_ids = ["${aws_security_group.sg-test-web.id}"]
+  ami                    = var.ami
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.sg-test-web.id]
+  subnet_id              = var.subnet_id
 
   tags = {
     Name = var.instance_tag

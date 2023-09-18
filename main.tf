@@ -17,4 +17,20 @@ module "web" {
   ami           = var.ami
   instance_type = var.instance_type
   instance_tag  = var.instance_tag
+  key_name      = var.key_name
+  subnet_id     = aws_subnet.tf-web.id
+  vpc_id        = aws_vpc.tf-vpc.id
+}
+
+module "db" {
+  source = "./modules/mysql"
+  depends_on = [module.web]
+
+  ami           = var.ami
+  instance_type = var.instance_type
+  instance_tag  = var.instance_tag
+  key_name      = var.key_name
+  subnet_id     = aws_subnet.tf-web.id
+  vpc_id        = aws_vpc.tf-vpc.id
+  sg_tf_web     = module.web.sg_tf_web
 }
