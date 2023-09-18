@@ -50,7 +50,33 @@ resource "aws_instance" "web_server" {
     destination = "/home/ubuntu/lemp_ubuntu.sh"
   }
 
+  provisioner "file" {
+    source      = "${path.module}/index.php"
+    destination = "/home/ubuntu/index.php"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir -p /server/http",
+      "sudo cp /home/ubuntu/index.php /server/http/index.php",
+      "sudo chmod +x /home/ubuntu/lemp_ubuntu.sh",
+      "cd /home/ubuntu && sudo ./lemp_ubuntu.sh",
+      "sudo cp /home/ubuntu/default-host.conf /etc/nginx/conf.d/default.conf",
+      "sudo cp /home/ubuntu/www.conf /etc/php/8.2/fpm/pool.d/www.conf",
+      "sudo service php8.2-fpm restart",
+      "sudo service nginx restart"
+    ]
+  }
+
   root_block_device {
     delete_on_termination = "true"
+  }
+
+  connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    password = ""
+    host     = self.public_ip
+    private_key = file("${path.module}/../../TF-TEST.pem")
   }
 }
