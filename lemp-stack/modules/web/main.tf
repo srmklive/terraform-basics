@@ -42,8 +42,8 @@ resource "aws_instance" "web_server" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/lamp_ubuntu.sh"
-    destination = "/home/ubuntu/lamp_ubuntu.sh"
+    source      = "${path.module}/lemp_ubuntu.sh"
+    destination = "/home/ubuntu/lemp_ubuntu.sh"
   }
 
   provisioner "file" {
@@ -55,10 +55,12 @@ resource "aws_instance" "web_server" {
     inline = [
       "sudo mkdir -p /server/http",
       "sudo cp /home/ubuntu/index.php /server/http/index.php",
-      "sudo chmod +x /home/ubuntu/lamp_ubuntu.sh",
-      "cd /home/ubuntu && sudo ./lamp_ubuntu.sh",
-      "sudo cp /home/ubuntu/default-host.conf /etc/apache2/sites-available/000-default.conf",
-      "sudo service apache2 restart",
+      "sudo chmod +x /home/ubuntu/lemp_ubuntu.sh",
+      "cd /home/ubuntu && sudo ./lemp_ubuntu.sh",
+      "sudo cp /home/ubuntu/default-host.conf /etc/nginx/conf.d/default.conf",
+      "sudo cp /home/ubuntu/www.conf /etc/php/8.2/fpm/pool.d/www.conf",
+      "sudo service php8.2-fpm restart",
+      "sudo service nginx restart",
       "sudo reboot"
     ]
   }
