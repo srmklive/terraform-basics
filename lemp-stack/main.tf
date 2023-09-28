@@ -18,7 +18,7 @@ resource "random_password" "mysql" {
 }
 
 module "web" {
-  source = "./modules/web"
+  source = "moduleseb"
 
   ami           = var.ami
   instance_type = var.instance_type
@@ -29,7 +29,7 @@ module "web" {
 }
 
 module "db" {
-  source = "./modules/mysql"
+  source = "modulesysql"
   depends_on = [module.web, random_password.mysql]
 
   ami           = var.ami
