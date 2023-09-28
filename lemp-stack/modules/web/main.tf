@@ -55,6 +55,7 @@ resource "aws_instance" "web_server" {
     inline = [
       "sudo mkdir -p /server/http",
       "sudo cp /home/ubuntu/index.php /server/http/index.php",
+      "sudo sed -i -e 's/\r$//' /home/ubuntu/lemp_ubuntu.sh",
       "sudo chmod +x /home/ubuntu/lemp_ubuntu.sh",
       "cd /home/ubuntu && sudo ./lemp_ubuntu.sh",
       "sudo cp /home/ubuntu/default-host.conf /etc/nginx/conf.d/default.conf",

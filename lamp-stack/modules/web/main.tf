@@ -55,6 +55,7 @@ resource "aws_instance" "web_server" {
     inline = [
       "sudo mkdir -p /server/http",
       "sudo cp /home/ubuntu/index.php /server/http/index.php",
+      "sudo sed -i -e 's/\r$//' /home/ubuntu/lamp_ubuntu.sh",
       "sudo chmod +x /home/ubuntu/lamp_ubuntu.sh",
       "cd /home/ubuntu && sudo ./lamp_ubuntu.sh",
       "sudo cp /home/ubuntu/default-host.conf /etc/apache2/sites-available/000-default.conf",

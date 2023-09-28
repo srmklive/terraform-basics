@@ -64,6 +64,7 @@ resource "aws_instance" "db" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x /home/ubuntu/install_mysql_ubuntu.sh",
+      "sudo sed -i -e 's/\r$//' /home/ubuntu/install_mysql_ubuntu.sh",
       "cd /home/ubuntu && sudo ./install_mysql_ubuntu.sh",
       "sudo reboot"
     ]
