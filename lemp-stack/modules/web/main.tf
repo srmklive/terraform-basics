@@ -42,6 +42,11 @@ resource "aws_instance" "web_server" {
   }
 
   provisioner "file" {
+    source      = "${path.module}/www.conf"
+    destination = "/home/ubuntu/www.conf"
+  }  
+
+  provisioner "file" {
     source      = "${path.module}/lemp_ubuntu.sh"
     destination = "/home/ubuntu/lemp_ubuntu.sh"
   }
