@@ -43,7 +43,7 @@ resource "aws_elb" "web_elb" {
 }
 
 resource "aws_autoscaling_group" "web" {
-  name = "${aws_launch_configuration.web.name}-asg"
+  name = "web-asg"
 
   min_size             = var.min_size
   desired_capacity     = var.min_size
