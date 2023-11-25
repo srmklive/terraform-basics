@@ -11,6 +11,13 @@ resource "aws_security_group" "sg-test-web" {
   }
 
   ingress {
+    from_port = "443"
+    to_port = "443"
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port = 22
     to_port = 22
     protocol = "tcp"
@@ -75,4 +82,9 @@ resource "aws_instance" "web_server" {
     host     = self.public_ip
     private_key = file("${path.module}/../../../${var.key_name}.pem")
   }
+}
+
+resource "aws_ami_from_instance" "tf-ami" {
+  name               = "tf-test-ami"
+  source_instance_id = "${element(aws_instance.web_server.*.id, 0)}"
 }
