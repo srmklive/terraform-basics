@@ -38,3 +38,4 @@ terraform.rc
 *.plan
 *.pem
 *mysql_root_password*
+terraform.lock.hcl

@@ -4,7 +4,6 @@ variable "ami" {
 
 variable instance_type {
   description = "Instance Type to provision for EC2"
-  default = "t2.nano"
 }
 
 variable "instance_tag" {
