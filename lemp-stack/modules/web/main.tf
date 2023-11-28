@@ -58,23 +58,21 @@ resource "aws_instance" "web_server" {
     destination = "/home/ubuntu/lemp_ubuntu.sh"
   }
 
-  provisioner "file" {
-    source      = "${path.module}/index.php"
-    destination = "/home/ubuntu/index.php"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir -p /server/http",
-      "sudo cp /home/ubuntu/index.php /server/http/index.php",
       "sudo sed -i -e 's/\r$//' /home/ubuntu/lemp_ubuntu.sh",
       "sudo chmod +x /home/ubuntu/lemp_ubuntu.sh",
       "cd /home/ubuntu && sudo ./lemp_ubuntu.sh",
+      "composer global require laravel/installer -n",
+      "export PATH=$PATH:\"/home/ubuntu/.config/composer/vendor/bin\"",
+      "sudo chown ubuntu:www-data -R /server/http",
+      "cd /server/http && laravel new web-app --jet --stack livewire -n",
+      "cd /server/http/web-app && sudo chmod 777 -R storage bootstrap/cache",
       "sudo cp /home/ubuntu/default-host.conf /etc/nginx/conf.d/default.conf",
       "sudo cp /home/ubuntu/www.conf /etc/php/8.2/fpm/pool.d/www.conf",
       "sudo service php8.2-fpm restart",
-      "sudo service nginx restart",
-      "sudo reboot"
+      "sudo service nginx restart"
     ]
   }
 

@@ -11,12 +11,6 @@ terraform {
 
 provider "aws" {}
 
-resource "random_password" "mysql" {
-  length = 16
-  special = true
-  override_special = "_%@"
-}
-
 module "web" {
   source = "./modules/web"
 
@@ -26,6 +20,12 @@ module "web" {
   key_name      = var.key_name
   subnet_id     = aws_subnet.tf-web.id
   vpc_id        = aws_vpc.tf-vpc.id
+}
+
+resource "random_password" "mysql" {
+  length = 16
+  special = true
+  override_special = "_%@"
 }
 
 module "db" {
