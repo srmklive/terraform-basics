@@ -66,7 +66,7 @@ resource "aws_instance" "db" {
     inline = [
       "sudo chmod +x /home/ubuntu/install_mysql_ubuntu.sh",
       "sudo sed -i -e 's/\r$//' /home/ubuntu/install_mysql_ubuntu.sh",
-      "cd /home/ubuntu && sudo ./install_mysql_ubuntu.sh"
+      "cd /home/ubuntu && sudo ./install_mysql_ubuntu.sh",
       "rm -f /home/ubuntu/*mysql*"
     ]
   }
