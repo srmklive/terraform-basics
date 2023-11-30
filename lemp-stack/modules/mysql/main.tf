@@ -42,6 +42,7 @@ resource "aws_instance" "db" {
   key_name      = var.key_name
   vpc_security_group_ids = [aws_security_group.test-db.id]
   subnet_id = var.subnet_id
+  user_data     = file("${path.module}/install_updates.sh")
 
   tags = {
     Name = "Database ${var.instance_tag}"
@@ -65,8 +66,8 @@ resource "aws_instance" "db" {
     inline = [
       "sudo chmod +x /home/ubuntu/install_mysql_ubuntu.sh",
       "sudo sed -i -e 's/\r$//' /home/ubuntu/install_mysql_ubuntu.sh",
-      "cd /home/ubuntu && sudo ./install_mysql_ubuntu.sh",
-      "sudo reboot"
+      "cd /home/ubuntu && sudo ./install_mysql_ubuntu.sh"
+      "rm -f /home/ubuntu/*mysql*"
     ]
   }
 

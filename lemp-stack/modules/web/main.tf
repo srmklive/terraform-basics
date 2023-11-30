@@ -38,6 +38,7 @@ resource "aws_instance" "web_server" {
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.sg-test-web.id]
   subnet_id              = var.subnet_id
+  user_data              = file("${path.module}/lemp_ubuntu.sh")
 
   tags = {
     Name = var.instance_tag
@@ -53,17 +54,10 @@ resource "aws_instance" "web_server" {
     destination = "/home/ubuntu/www.conf"
   }  
 
-  provisioner "file" {
-    source      = "${path.module}/lemp_ubuntu.sh"
-    destination = "/home/ubuntu/lemp_ubuntu.sh"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "sudo mkdir -p /server/http",
       "sudo sed -i -e 's/\r$//' /home/ubuntu/lemp_ubuntu.sh",
-      "sudo chmod +x /home/ubuntu/lemp_ubuntu.sh",
-      "cd /home/ubuntu && sudo ./lemp_ubuntu.sh",
       "composer global require laravel/installer -n",
       "export PATH=$PATH:\"/home/ubuntu/.config/composer/vendor/bin\"",
       "sudo chown ubuntu:www-data -R /server/http",
